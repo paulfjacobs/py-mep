@@ -26,6 +26,8 @@ class Gene(object):
         :type constants: list
         :return: nothing; modifies the eval_matrix
         """
+
+
 # TODO: Should we also add a mutate method to the gene itself?
 
 
@@ -42,7 +44,7 @@ class VariableGene(object):
         :param is_feature: whether this is a feature variable or a constant
         :type is_feature: bool
         """
-        self.logger = logging.getLogger(self.__class__)
+        # self.logger = logging.getLogger(self.__class__)
 
         self.index = index
         self.is_feature = is_feature
@@ -75,6 +77,17 @@ class VariableGene(object):
             else:
                 eval_matrix[gene_index, example_index] = constants[self.index]
 
+    def __str__(self):
+        return "VariableGene({}, is_feature={})".format(self.index, self.is_feature)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, other):
+        if other is None or not isinstance(other, VariableGene):
+            return False
+        return self.index == other.index and self.is_feature == other.is_feature
+
 
 class OperatorGene(object):
     """
@@ -93,7 +106,7 @@ class OperatorGene(object):
         :param address2: index into the eval_matrix
         :type address2: int
         """
-        self.logger = logging.getLogger(self.__class__)
+        # self.logger = logging.getLogger(self.__class__)
 
         self.operation = operation
         self.address1 = address1
@@ -123,3 +136,14 @@ class OperatorGene(object):
             # TODO: Catch errors; in particular division can be a problem
             eval_matrix[gene_index, example_index] = self.operation(eval_matrix[self.address1][example_index],
                                                                     eval_matrix[self.address2][example_index])
+
+    def __str__(self):
+        return "OperatorGene({}, {}, {})".format(self.operation, self.address1, self.address2)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, other):
+        if other is None or not isinstance(other, OperatorGene):
+            return False
+        return self.operation == other.operation and self.address1 == other.address1 and self.address2 == other.address2

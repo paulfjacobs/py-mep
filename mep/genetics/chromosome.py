@@ -23,10 +23,13 @@ class Chromosome(object):
         :param constants: the constants
         :type constants: list of float
         """
-        self.logger = logging.getLogger(self.__class__)
+        # self.logger = logging.getLogger(self.__class__)
 
+        # core genes and constants lists
         self.genes = genes
         self.constants = constants
+
+        # TODO: track the best fitness and the associated best gene seen so far
 
     @classmethod
     def generate_random_chromosome(cls, num_constants, constants_min, constants_max, constants_prob,
@@ -82,3 +85,9 @@ class Chromosome(object):
 
         # construct and return the chromosome
         return Chromosome(genes, constants)
+
+    def __str__(self):
+        return "Chromosome({}, {})".format(self.genes, self.constants)
+
+    def __repr__(self):
+        return self.__str__()
