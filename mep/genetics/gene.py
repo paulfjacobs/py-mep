@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
@@ -41,6 +42,8 @@ class VariableGene(object):
         :param is_feature: whether this is a feature variable or a constant
         :type is_feature: bool
         """
+        self.logger = logging.getLogger(self.__class__)
+
         self.index = index
         self.is_feature = is_feature
 
@@ -90,6 +93,8 @@ class OperatorGene(object):
         :param address2: index into the eval_matrix
         :type address2: int
         """
+        self.logger = logging.getLogger(self.__class__)
+
         self.operation = operation
         self.address1 = address1
         self.address2 = address2

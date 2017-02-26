@@ -1,11 +1,11 @@
 import unittest
-from mep.genetics.gene import VariableGene
+from mep.genetics.gene import VariableGene, OperatorGene
 import numpy as np
 
 
-class TestVariableGene(unittest.TestCase):
+class TestGene(unittest.TestCase):
     """
-    Tests for the variable gene.
+    Tests for the genes.
     """
 
     def test_basic_constant(self):
@@ -97,3 +97,33 @@ class TestVariableGene(unittest.TestCase):
         constant_gene.evaluate(1, eval_matrix, data_matrix, constants)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
 
+    def test_operator_gene_basic(self):
+        """
+        This is a test of the operator gene. We need at least two genes as the operator needs to be able to reference
+        another gene evaluation.
+        """
+        # construct; using the same address on both sides of the operator; in other words we will be adding the previous
+        # gene (at 0) to itself
+        address_index = 0
+        gene = OperatorGene(lambda a, b: a + b, address1=address_index, address2=address_index)
+
+        # simple eval matrix; 2 gene in a chromosome, 3 examples, 0 constants
+        num_examples = 1
+        num_genes = 2
+        num_features = 3
+
+        # create
+        constants = []
+        eval_matrix = np.zeros((num_genes, num_examples))
+        data_matrix = np.zeros((num_examples, num_features))
+
+        # simulate the use of a constant in the other, first gene,
+        eval_matrix[0, 0] = 2
+
+        # expected; first gene is unchanged; the 2nd one is the sum of the first with itself (i.e. 4)
+        expected_eval_matrix = np.matrix([[2],
+                                          [4]])
+
+        # run the evaluate
+        gene.evaluate(1, eval_matrix, data_matrix, constants)
+        self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
