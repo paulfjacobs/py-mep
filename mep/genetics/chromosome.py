@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 from mep.genetics.gene import Gene, VariableGene, OperatorGene
 from random import random, randint, choice
 
@@ -29,7 +30,9 @@ class Chromosome(object):
         self.genes = genes
         self.constants = constants
 
-        # TODO: track the best fitness and the associated best gene seen so far
+        # track the best found error and the associated gene
+        self.error = float('inf')
+        self.best_gene_index = -1
 
     @classmethod
     def generate_random_chromosome(cls, num_constants, constants_min, constants_max, constants_prob,
@@ -85,6 +88,25 @@ class Chromosome(object):
 
         # construct and return the chromosome
         return Chromosome(genes, constants)
+
+    def evaluate(self, data_matrix, targets):
+        """
+        Evaluate the various genes.
+
+        :param data_matrix: the data matrix; rows are feature vectors; comes from the data set; it is (n, m) where "n"
+        is the number of examples and "m" is the number of features.
+        :type data_matrix: np.matrix
+        :param targets: the targets; equal to the number of examples (n)
+        :type targets: list
+        """
+        num_examples = data_matrix.shape[0]
+        eval_matrix = np.zeros((len(self.genes), num_examples))
+        for gene_index, gene in enumerate(self.genes):
+            # compute the error for this gene; if it is the best we have found then update
+            error = gene.evaluate(gene_index, eval_matrix, data_matrix, self.constants, targets)
+            if error < self.error:
+                self.error = error
+                self.best_gene_index = gene_index
 
     def __str__(self):
         return "Chromosome({}, {})".format(self.genes, self.constants)
