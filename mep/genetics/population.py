@@ -1,4 +1,5 @@
 from mep.genetics.chromosome import Chromosome
+import random
 
 
 class Population(object):
@@ -66,4 +67,28 @@ class Population(object):
         for chromosome in self.chromosomes:
             chromosome.evaluate(self.data_matrix, self.targets)
 
-        # TODO: sort them?
+        # sort the chromosomes
+        self.chromosomes.sort()
+
+    def random_tournament_selection(self, tournament_size):
+        """
+        Randomly select (tournament_size) chromosomes and return the best one.
+        :param tournament_size: the size of the tournament
+        :type tournament_size: int
+        :return: the
+        """
+        # TODO: Check for bad tournament size
+        best_chromosome = None
+        for _ in range(tournament_size):
+            chromosome = random.choice(self.chromosomes)
+            if best_chromosome is None or chromosome.error < best_chromosome.error:
+                best_chromosome = chromosome
+
+        return best_chromosome
+
+    def next_generation(self):
+        """
+        Advance to the next generation.
+        """
+        # TODO: populate
+
