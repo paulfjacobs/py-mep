@@ -25,14 +25,16 @@ class TestGene(unittest.TestCase):
         constants = [1., 2.]
         eval_matrix = np.zeros((num_genes, num_examples))
         data_matrix = np.zeros((num_examples, num_features))
+        targets = [0] * num_examples
 
         # expected; only one gene and it is going to be using the first constant;
         gene_index = 0
         expected_eval_matrix = np.matrix([[constants[constant_index], constants[constant_index]]])
 
         # run the evaluate
-        gene.evaluate(gene_index, eval_matrix, data_matrix, constants)
+        error = gene.evaluate(gene_index, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
+        self.assertEquals((1. - 0) + (1. - 0), error)
 
     def test_basic_feature_gene(self):
         """
@@ -51,6 +53,7 @@ class TestGene(unittest.TestCase):
         constants = [1., 2.]
         eval_matrix = np.zeros((num_genes, num_examples))
         data_matrix = np.zeros((num_examples, num_features))
+        targets = [0] * num_examples
 
         # set the data matrix for the feature that we care about
         data_matrix[0, feature_index] = 5.
@@ -61,8 +64,9 @@ class TestGene(unittest.TestCase):
         expected_eval_matrix = np.matrix([[data_matrix[0, feature_index], data_matrix[1, feature_index]]])
 
         # run the evaluate
-        gene.evaluate(gene_index, eval_matrix, data_matrix, constants)
+        error = gene.evaluate(gene_index, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
+        self.assertEquals((5. - 0.) + (7. - 0.), error)
 
     def test_constant_and_feature_gene(self):
         """
@@ -83,6 +87,7 @@ class TestGene(unittest.TestCase):
         constants = [1., 2.]
         eval_matrix = np.zeros((num_genes, num_examples))
         data_matrix = np.zeros((num_examples, num_features))
+        targets = [0] * num_examples
 
         # set the data matrix for the feature that we care about
         data_matrix[0, feature_index] = 5.
@@ -93,8 +98,8 @@ class TestGene(unittest.TestCase):
                                           [constants[constant_index], constants[constant_index]]])
 
         # run the evaluate
-        feature_gene.evaluate(0, eval_matrix, data_matrix, constants)
-        constant_gene.evaluate(1, eval_matrix, data_matrix, constants)
+        feature_error = feature_gene.evaluate(0, eval_matrix, data_matrix, constants, targets)
+        constant_error = constant_gene.evaluate(1, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
 
     def test_operator_gene_basic(self):
@@ -111,6 +116,7 @@ class TestGene(unittest.TestCase):
         num_examples = 1
         num_genes = 2
         num_features = 3
+        targets = [0] * num_examples
 
         # create
         constants = []
@@ -125,5 +131,5 @@ class TestGene(unittest.TestCase):
                                           [4]])
 
         # run the evaluate
-        gene.evaluate(1, eval_matrix, data_matrix, constants)
+        error = gene.evaluate(1, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))

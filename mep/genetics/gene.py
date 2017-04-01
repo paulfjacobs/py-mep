@@ -10,7 +10,7 @@ class Gene(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def evaluate(self, gene_index, eval_matrix, data_matrix, constants):
+    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
         """
         This method will modify the eval_matrix for this gene index for each example in the data_matrix.
 
@@ -24,7 +24,10 @@ class Gene(object):
         :type data_matrix: np.matrix
         :param constants: the constants associated with this chromosome
         :type constants: list
-        :return: nothing; modifies the eval_matrix
+        :param targets: the targets; equal to the number of examples (n)
+        :type targets: list
+        :return: error (sum of error across the examples); modifies the eval_matrix
+        :rtype: float
         """
 
 
@@ -49,7 +52,7 @@ class VariableGene(object):
         self.index = index
         self.is_feature = is_feature
 
-    def evaluate(self, gene_index, eval_matrix, data_matrix, constants):
+    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
         """
         This method will modify the eval_matrix for this gene index for each example in the data_matrix.
 
@@ -64,18 +67,32 @@ class VariableGene(object):
         :type data_matrix: np.matrix
         :param constants: the constants associated with this chromosome
         :type constants: list
-        :return: nothing; modifies the eval_matrix
+        :param targets: the targets; equal to the number of examples (n)
+        :type targets: list
+        :return: error (sum of error); modifies the eval_matrix
+        :rtype: float
         """
+        # TODO: Move common logic up
+        # TODO: Handle classification as well as regression
+
         # go through and set the data
         num_examples = eval_matrix.shape[1]
+        sum_of_errors = 0.
         for example_index in range(0, num_examples):
             # each column is one example in the data matrix (i.e. one feature vector)
             # if we are a feature variable then we look at the corresponding feature in the feature vector for this
             # example; otherwise (as a constant) we just go to that (independent of the example we are in)
             if self.is_feature:
-                eval_matrix[gene_index, example_index] = data_matrix[example_index, self.index]
+                value = data_matrix[example_index, self.index]
             else:
-                eval_matrix[gene_index, example_index] = constants[self.index]
+                value = constants[self.index]
+            # calculate error
+            sum_of_errors += abs(targets[example_index] - value)
+
+            # set it in the eval matrix
+            eval_matrix[gene_index, example_index] = value
+
+        return sum_of_errors
 
     def __str__(self):
         return "VariableGene({}, is_feature={})".format(self.index, self.is_feature)
@@ -112,7 +129,7 @@ class OperatorGene(object):
         self.address1 = address1
         self.address2 = address2
 
-    def evaluate(self, gene_index, eval_matrix, data_matrix, constants):
+    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
         """
         This method will modify the eval_matrix for this gene index for each example in the data_matrix.
 
@@ -126,16 +143,27 @@ class OperatorGene(object):
         :type data_matrix: np.matrix
         :param constants: the constants associated with this chromosome
         :type constants: list
-        :return: nothing; modifies the eval_matrix
+        :param targets: the targets; equal to the number of examples (n)
+        :type targets: list
+        :return: error (sum of error); modifies the eval_matrix
+        :rtype: float
+
         """
         # go through and set the data
         num_examples = eval_matrix.shape[1]
+        sum_of_errors = 0.
         for example_index in range(0, num_examples):
             # each column is one example in the data matrix (i.e. one feature vector)
 
             # TODO: Catch errors; in particular division can be a problem
-            eval_matrix[gene_index, example_index] = self.operation(eval_matrix[self.address1][example_index],
-                                                                    eval_matrix[self.address2][example_index])
+            value = self.operation(eval_matrix[self.address1][example_index],
+                                   eval_matrix[self.address2][example_index])
+            # set it in the eval matrix
+            eval_matrix[gene_index, example_index] = value
+
+            sum_of_errors += abs(targets[example_index] - value)
+
+        return sum_of_errors
 
     def __str__(self):
         return "OperatorGene({}, {}, {})".format(self.operation, self.address1, self.address2)
