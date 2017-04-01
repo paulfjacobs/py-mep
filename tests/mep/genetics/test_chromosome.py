@@ -1,8 +1,24 @@
 import unittest
 import random
-from mep.genetics.gene import VariableGene, OperatorGene
+from mep.genetics.gene import VariableGene, OperatorGene, Gene
 from mep.genetics.chromosome import Chromosome
 import numpy as np
+
+
+class MockedGene(Gene):
+    def __init__(self, error_to_return):
+        """
+        Initialize.
+        :param error_to_return: what to return in the evaluate
+        :type error_to_return: float
+        """
+        self.error_to_return = error_to_return
+
+    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
+        """
+        Simple mocked version.
+        """
+        return self.error_to_return
 
 
 class TestChromosome(unittest.TestCase):
@@ -38,3 +54,20 @@ class TestChromosome(unittest.TestCase):
 
         # verify constant
         self.assertAlmostEquals(8.599796663725433, chromosome.constants[0])
+
+    def test_evaluate(self):
+        """
+        Basic test of the evaluate method.
+        """
+        # construct mocked genes
+        genes = [MockedGene(10), MockedGene(1)]
+
+        # construct chromosome
+        chromosome = Chromosome(genes, constants=[1, 2, 3])
+
+        # evaluate
+        chromosome.evaluate(np.zeros((2, 2)), targets=[20, 30])
+
+        # confirm the genes
+        self.assertEqual(genes[1], genes[chromosome.best_gene_index])
+        self.assertEqual(genes[1].error_to_return, chromosome.error)
