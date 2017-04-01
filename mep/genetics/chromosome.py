@@ -113,3 +113,13 @@ class Chromosome(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def __lt__(self, other):
+        """
+        Less-than used by sort(...)
+
+        :param other:
+        :type other: Chromosome
+        :return:
+        """
+        return self.error < other.error

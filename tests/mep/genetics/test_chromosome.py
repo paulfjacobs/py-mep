@@ -71,3 +71,19 @@ class TestChromosome(unittest.TestCase):
         # confirm the genes
         self.assertEqual(genes[1], genes[chromosome.best_gene_index])
         self.assertEqual(genes[1].error_to_return, chromosome.error)
+
+    def test_sort(self):
+        """
+        Test the sort mechanism.
+        """
+        # construct the chromosomes and test sorting them (by error)
+        min_chromosome, mid_chromosome, max_chromosome = Chromosome([], []), Chromosome([], []), Chromosome([], [])
+        min_chromosome.error = 1
+        mid_chromosome.error = 2
+        max_chromosome.error = 3
+        chromosomes = [mid_chromosome, max_chromosome, min_chromosome]
+        expected_chromosomes = [min_chromosome, mid_chromosome, max_chromosome]
+
+        # do the sort and verify
+        chromosomes.sort()
+        self.assertEqual(expected_chromosomes, chromosomes)
