@@ -47,6 +47,10 @@ class Population(object):
         self.num_chromosomes = num_chromosomes
         self.operators_prob = operators_prob
 
+        # TODO: take in
+        self.crossover_prob = 0.9
+        self.mutation_prob = 0.1
+
         # the chromosomes
         self.chromosomes = None
 
@@ -86,9 +90,52 @@ class Population(object):
 
         return best_chromosome
 
+    def one_cut_point_crossover(self, parent1, parent2):
+        """
+        Construct two offspring chromosomes from the parents. We determine the crossover point so that we
+        take the first genes up to that point from parent1/parent2 and then we switch.
+        :param parent1: one parent chromosome
+        :type parent1: Chromosome
+        :param parent2: the other parent chromosome
+        :type parent2: Chromosome
+        :return: two offsprings
+        :rtype: (Chromosome, Chromosome)
+        """
+        # construct the genes and constants for the offsprings from the parents
+        offspring1 = Chromosome([], [])
+        offspring2 = Chromosome([], [])
+
+        # determine the crossover point;
+        cutting_point = random.randint(0, self.num_genes)
+
+        # copy over the genes; first half and now the 2nd half (from the other chromosome)
+        offspring1.genes = parent1.genes[:cutting_point] + parent2.genes[cutting_point:]
+        offspring2.genes = parent2.genes[:cutting_point] + parent1.genes[cutting_point:]
+
+        # same thing with the constants
+        cutting_point = random.randint(0, self.num_constants)
+
+        # copy over the constants; first half and now the 2nd half
+        offspring1.constants = parent1.constants[:cutting_point] + parent2.constants[cutting_point:]
+        offspring2.constants = parent2.constants[:cutting_point] + parent1.constants[cutting_point:]
+
+        return offspring1, offspring2
+
     def next_generation(self):
         """
         Advance to the next generation.
         """
-        # TODO: populate
+        for _ in range(0, len(self.chromosomes), 2):
+            # select parents
+            chromosome1 = self.random_tournament_selection(2)
+            chromosome2 = self.random_tournament_selection(2)
+
+            # crossover
+            if random.random() < self.crossover_prob:
+                # TODO: do crossover
+                pass
+            else:
+                # offspring are copies of the parents
+                pass
+            # TODO: fill in
 
