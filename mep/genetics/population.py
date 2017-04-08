@@ -140,17 +140,41 @@ class Population(object):
                 offspring1 = copy.copy(chromosome1)
                 offspring2 = copy.copy(chromosome2)
 
-            # mutate (potentially) offspring
+            # TODO: we could consolidate the offspring code into one method and just call it twice
+            # mutate (potentially) offspring; calculate error
             offspring1.mutate(self.mutation_prob, self.num_constants, self.constants_min,
                               self.constants_max, self.constants_prob,
                               self.feature_variable_prob,
                               self.num_feature_variables, self.num_genes,
                               self.operators_prob)
-            # TODO: evaluate
+            offspring1.evaluate(self.data_matrix, self.targets)
             offspring2.mutate(self.mutation_prob, self.num_constants, self.constants_min,
                               self.constants_max, self.constants_prob,
                               self.feature_variable_prob,
                               self.num_feature_variables, self.num_genes,
                               self.operators_prob)
+            offspring2.evaluate(self.data_matrix, self.targets)
 
-            # TODO: fill in
+            # replace the worst chromosome in the population; note that the chromosomes start in a sorted
+            # order so the one at the end has the highest error; we now insert the offspring into the list
+            # at their error level -- i.e. keep it in sorted order
+            # TODO: We should be able to do this in one loop but let's do each offspring separately as it is clearer
+            insert_index = -1
+            for chromosome_index, chromosome in enumerate(self.chromosomes):
+                if offspring1.error < chromosome.error:
+                    insert_index = chromosome_index
+                    break
+            # insert it (if it wasn't worse than all existing chromosomes) at the appropriate index
+            if insert_index > -1:
+                self.chromosomes.insert(insert_index, offspring1)
+
+            # now the other offspring
+            insert_index = -1
+            for chromosome_index, chromosome in enumerate(self.chromosomes):
+                if offspring2.error < chromosome.error:
+                    insert_index = chromosome_index
+                    break
+            # insert it (if it wasn't worse than all existing chromosomes) at the appropriate index
+            if insert_index > -1:
+                self.chromosomes.insert(insert_index, offspring2)
+
