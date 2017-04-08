@@ -1,5 +1,6 @@
 from mep.genetics.chromosome import Chromosome
 import random
+import copy
 
 
 class Population(object):
@@ -108,6 +109,7 @@ class Population(object):
         # determine the crossover point;
         cutting_point = random.randint(0, self.num_genes)
 
+        # TODO: copy the genes
         # copy over the genes; first half and now the 2nd half (from the other chromosome)
         offspring1.genes = parent1.genes[:cutting_point] + parent2.genes[cutting_point:]
         offspring2.genes = parent2.genes[:cutting_point] + parent1.genes[cutting_point:]
@@ -132,10 +134,23 @@ class Population(object):
 
             # crossover
             if random.random() < self.crossover_prob:
-                # TODO: do crossover
-                pass
+                offspring1, offspring2 = self.one_cut_point_crossover(chromosome1, chromosome2)
             else:
                 # offspring are copies of the parents
-                pass
-            # TODO: fill in
+                offspring1 = copy.copy(chromosome1)
+                offspring2 = copy.copy(chromosome2)
 
+            # mutate (potentially) offspring
+            offspring1.mutate(self.mutation_prob, self.num_constants, self.constants_min,
+                              self.constants_max, self.constants_prob,
+                              self.feature_variable_prob,
+                              self.num_feature_variables, self.num_genes,
+                              self.operators_prob)
+            # TODO: evaluate
+            offspring2.mutate(self.mutation_prob, self.num_constants, self.constants_min,
+                              self.constants_max, self.constants_prob,
+                              self.feature_variable_prob,
+                              self.num_feature_variables, self.num_genes,
+                              self.operators_prob)
+
+            # TODO: fill in

@@ -108,6 +108,55 @@ class Chromosome(object):
                 self.error = error
                 self.best_gene_index = gene_index
 
+    def mutate(self, gene_mutation_prob, num_constants, constants_min, constants_max, constants_prob,
+               feature_variable_prob, num_feature_variables, num_genes, operators_prob):
+        """
+        Mutate the chromosome. Works by going through and randomly mutating genes and then constants.
+        :param gene_mutation_prob: probability to mutate a given gene
+        :type gene_mutation_prob: float
+        :param num_constants: how many constants to have
+        :type num_constants: int
+        :param constants_min: the min range of the constants
+        :type constants_min: float
+        :param constants_max: the max range of the constants
+        :type constants_max: float
+        :param constants_prob: the probability that a given gene is a constant
+        :type constants_prob: float
+        :param feature_variable_prob: the probability that a given gene is a feature variable
+        :type feature_variable_prob: float
+        :param num_feature_variables: how many features we have
+        :type num_feature_variables: int
+        :param num_genes: how many genes
+        :type num_genes: int
+        :param operators_prob: the probability that a given gene is an operator
+        :type operators_prob: float
+        :return: nothing
+        """
+        # the probabilities are all the same for generating a random chromosome; therefore let's construct
+        # a random chromosome and then (effectively) do a uniform crossover where a "mutate" means that we
+        # take the new chromosome's gene/constants
+        # TODO: Should we have these variables set in the chromosome then?
+        # TODO: maybe just pass in this random chromosome then?
+        random_chromosome = Chromosome.generate_random_chromosome(num_constants, constants_min,
+                                                                  constants_max, constants_prob,
+                                                                  feature_variable_prob,
+                                                                  num_feature_variables, num_genes,
+                                                                  operators_prob)
+
+        # go through mutating genes;
+        for gene_index in range(len(self.genes)):
+            # decide if we are going to mutate this gene
+            if random() <= gene_mutation_prob:
+                # mutated; therefore grab the corresponding gene from the random chromosome
+                self.genes[gene_index] = random_chromosome.genes[gene_index]
+
+        # go through mutating constants;
+        for constants_index in range(len(self.constants)):
+            # decide if we are going to mutate this gene
+            if random() <= gene_mutation_prob:
+                # mutated; therefore grab the corresponding constant from the random chromosome
+                self.constants[constants_index] = random_chromosome.constants[constants_index]
+
     def __str__(self):
         return "Chromosome({}, {})".format(self.genes, self.constants)
 
