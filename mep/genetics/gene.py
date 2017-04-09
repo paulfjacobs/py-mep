@@ -97,6 +97,17 @@ class VariableGene(object):
     def __str__(self):
         return "VariableGene({}, is_feature={})".format(self.index, self.is_feature)
 
+    def pretty_string(self):
+        """
+        Pretty program string version.
+        :return: string version
+        :rtype: str
+        """
+        if self.is_feature:
+            return "FEATURES[{}]".format(self.index)
+        else:
+            return "CONSTANTS[{}]".format(self.index)
+
     def __repr__(self):
         return self.__str__()
 

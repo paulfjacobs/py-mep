@@ -8,7 +8,7 @@
   "mutation_probability": 0.1,
   "crossover_probability": 0.9,
 
-  "variables_probability": 0.4,
+  "feature_variables_probability": 0.4,
   "operators_probability": 0.5,
 
   "num_constants": 3,

@@ -160,6 +160,38 @@ class Chromosome(object):
     def __str__(self):
         return "Chromosome({}, {})".format(self.genes, self.constants)
 
+    def pretty_string(self, stop_at_best=True):
+        """
+        Output in a program like format. First show the constants. Then one line per gene.
+        :return: the program
+        :rtype: str
+        """
+        # first we show the constants
+        program = "CONSTANTS = [{}]\n".format(",".join([str(c) for c in self.constants]))
+
+        # now show each gene on a separate line
+        for gene_index, gene in enumerate(self.genes):
+            gene_str = gene.__str__()
+            if type(gene) == VariableGene:
+                gene_str = gene.pretty_string()
+            elif type(gene) == OperatorGene:
+                # TODO: Push this logic into the gene; the only tricky part is the operator lambda; we will probably
+                # need to replace the lambda with a larger object
+                if gene.operation == Chromosome.operator_lambdas[0]:
+                    op = "+"
+                elif gene.operation == Chromosome.operator_lambdas[1]:
+                    op = "-"
+                elif gene.operation == Chromosome.operator_lambdas[2]:
+                    op = "*"
+                gene_str = "PROGRAM[{}] {} PROGRAM[{}]".format(gene.address1, op, gene.address2)
+            program += "{}:{}\n".format(gene_index, gene_str)
+
+            if self.best_gene_index == gene_index and stop_at_best:
+                return program
+
+        # if we want to print the full program
+        return program
+
     def __repr__(self):
         return self.__str__()
 
