@@ -27,7 +27,7 @@ if __name__ == "__main__":
     logging.basicConfig(filename="{}/MEP_{}.log".format(output_logs_dir, dt.datetime.now().strftime("%Y%m%d")),
                         level=logging.DEBUG,
                         filemode='w',
-                        format="%(asctime)s %(name)s %(funcName)s %(levelname) %(message)s")
+                        format="%(asctime)s %(name)s %(funcName)s %(levelname)s %(message)s")
     logger = logging.getLogger("main")
     logger.info("Starting up...")
 
