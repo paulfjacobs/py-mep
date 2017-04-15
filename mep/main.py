@@ -45,13 +45,20 @@ if __name__ == "__main__":
         best_chromosome = population.chromosomes[0]
         logger.debug("Generation number {} best chromosome error {}".format(generation,
                                                                             best_chromosome.error))
-        print("Generation number {} best chromosome error {}".format(generation,
-                                                                     best_chromosome.error))
         if best_chromosome.error == 0:
             logger.debug("Exiting early as we have hit the best possible error.")
             break
         population.next_generation()
 
-    print("Best chromosome error {} and chromosome {}".format(best_chromosome.error, best_chromosome))
-    print("Best chromosome error {} and chromosome (pretty)\n {}".format(best_chromosome.error,
-                                                                         best_chromosome.pretty_string()))
+    logger.debug("Best chromosome error {} and chromosome (pretty)\n {}".format(best_chromosome.error,
+                                                                                best_chromosome.pretty_string()))
+
+    # prune out the unused genes
+    best_chromosome.prune()
+    logger.debug("Best chromosome error {} and chromosome (pretty)\n {}".format(best_chromosome.error,
+                                                                                best_chromosome.pretty_string()))
+
+    # TODO: Convert the output to a valid python program
+    # TODO: Add support for classification
+    # TODO: Add example digital circuit test
+    # TODO: Add UDFs

@@ -1,5 +1,6 @@
 import logging
 import numpy as np
+from collections import deque
 from mep.genetics.gene import Gene, VariableGene, OperatorGene
 from random import random, randint, choice
 
@@ -24,7 +25,7 @@ class Chromosome(object):
         :param constants: the constants
         :type constants: list of float
         """
-        # self.logger = logging.getLogger(self.__class__)
+        self.logger = logging.getLogger(self.__class__.__name__)
 
         # core genes and constants lists
         self.genes = genes
@@ -191,6 +192,54 @@ class Chromosome(object):
 
         # if we want to print the full program
         return program
+
+    def prune(self):
+        """
+        Trim out the unused genes. NOTE: This "breaks" the chromosomes as it is going to change how many genes are
+        in the program. Only do this once we have finished evolving the program.
+        """
+        # the best gene index is going to be the last line of the program; since the genes never reference genes
+        # beyond it then we just proceed back to the top and remove any which haven't been referenced; we determine
+        # this via a BFS type search
+
+        # the genes that are in use -- i.e. that will be kept;
+        gene_indices_in_use = set()
+        visited = set()
+
+        # start from best gene index
+        genes_indices_to_visit = deque()
+        genes_indices_to_visit.appendleft(self.best_gene_index)
+        gene_indices_in_use.add(self.best_gene_index)
+
+        while len(genes_indices_to_visit) > 0:
+            # the index to visit
+            gene_index = genes_indices_to_visit.pop()
+
+            # mark as visited
+            visited.add(gene_index)
+
+            # check the addresses on the gene if it is an operator
+            gene = self.genes[gene_index]
+            if type(gene) == OperatorGene:
+                genes_indices_to_visit.appendleft(gene.address1)
+                genes_indices_to_visit.appendleft(gene.address2)
+                gene_indices_in_use.add(gene.address1)
+                gene_indices_in_use.add(gene.address2)
+                self.logger.debug("At gene index {} which references {} and {}".format(gene_index,
+                                                                                       gene.address1, gene.address2))
+
+        # now remove any genes that aren't used
+        gene_indices_in_use = list(gene_indices_in_use)
+        gene_indices_in_use.sort()
+        self.logger.debug("All gene indices in use {}".format(gene_indices_in_use))
+        self.genes = [self.genes[i] for i in gene_indices_in_use]
+
+        # TODO: This could be done in the list comprehension but it is clearer to just do another pass
+        # re-map the address to the new index
+        for gene in self.genes:
+            if type(gene) == OperatorGene:
+                gene.address1 = gene_indices_in_use.index(gene.address1)
+                gene.address2 = gene_indices_in_use.index(gene.address2)
 
     def __repr__(self):
         return self.__str__()
