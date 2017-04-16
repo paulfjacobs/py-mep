@@ -241,6 +241,55 @@ class Chromosome(object):
                 gene.address1 = gene_indices_in_use.index(gene.address1)
                 gene.address2 = gene_indices_in_use.index(gene.address2)
 
+    def to_python(self):
+        """
+        Convert to python program string.
+        :return: python string program
+        :rtype: str
+        """
+        # python program string
+        python_program = """
+import sys
+
+if __name__ == "__main__":
+    # constants
+    {}
+
+    # now the genes
+    {}
+
+    # print out the final answer
+    {}
+    """
+
+        # constants
+        constants_str = "constants = {}".format(self.constants)
+
+        # genes
+        genes_str = "program = [0] * {}\n".format(len(self.genes))
+        for gene_index, gene in enumerate(self.genes):
+            genes_str += "    program[{}] = ".format(gene_index)
+            if type(gene) == VariableGene:
+                if gene.is_feature:
+                    genes_str += "float(sys.argv[{}])".format(gene.index + 1)
+                else:
+                    genes_str += "constants[{}]".format(gene.index)
+            elif type(gene) == OperatorGene:
+                if gene.operation == Chromosome.operator_lambdas[0]:
+                    op = "+"
+                elif gene.operation == Chromosome.operator_lambdas[1]:
+                    op = "-"
+                elif gene.operation == Chromosome.operator_lambdas[2]:
+                    op = "*"
+                genes_str += "program[{}] {} program[{}]".format(gene.address1, op, gene.address2)
+            genes_str += "\n"
+
+        # print statement
+        python_program = python_program.format(constants_str, genes_str, "print(program[{}])".format(len(self.genes)-1))
+
+        # return it
+        return python_program
+
     def __repr__(self):
         return self.__str__()
 
