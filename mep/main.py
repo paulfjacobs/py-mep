@@ -11,6 +11,7 @@ if __name__ == "__main__":
 
     # get the data file
     data_set_name = sys.argv[1]
+    python_file_name = sys.argv[2]
     data_set = DataSet(data_set_name)
 
     # read config file
@@ -53,10 +54,19 @@ if __name__ == "__main__":
     logger.debug("Best chromosome error {} and chromosome (pretty)\n {}".format(best_chromosome.error,
                                                                                 best_chromosome.pretty_string()))
 
+    # TODO: this should probably be optional
     # prune out the unused genes
     best_chromosome.prune()
     logger.debug("Best chromosome error {} and chromosome (pretty)\n {}".format(best_chromosome.error,
                                                                                 best_chromosome.pretty_string()))
+
+    # TODO: Optional?
+    # we then convert the chromosome into a valid python program and write it out to file
+    with open(python_file_name, 'w') as python_file:
+        python_program = best_chromosome.to_python()
+        logger.debug("Write out the python program to {}".format(python_file_name))
+        logger.debug(python_program)
+        python_file.write(python_program)
 
     # TODO: Convert the output to a valid python program
     # TODO: Add support for classification
