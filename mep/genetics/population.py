@@ -164,7 +164,7 @@ class Population(object):
                     break
             # insert it (if it wasn't worse than all existing chromosomes) at the appropriate index
             if insert_index > -1:
-                self.chromosomes.insert(insert_index, offspring1)
+                self.chromosomes[insert_index] = offspring1
 
             # now the other offspring
             insert_index = -1
@@ -174,5 +174,5 @@ class Population(object):
                     break
             # insert it (if it wasn't worse than all existing chromosomes) at the appropriate index
             if insert_index > -1:
-                self.chromosomes.insert(insert_index, offspring2)
+                self.chromosomes[insert_index] = offspring2
 

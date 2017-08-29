@@ -4,6 +4,7 @@ import numpy as np
 from mep.genetics.population import Population
 from mep.genetics.chromosome import Chromosome
 
+
 class TestPopulation(unittest.TestCase):
     """
     Test the Population class.

@@ -44,8 +44,9 @@ if __name__ == "__main__":
     best_chromosome = None
     for generation in range(int(config["num_generations"])):
         best_chromosome = population.chromosomes[0]
-        logger.debug("Generation number {} best chromosome error {}".format(generation,
-                                                                            best_chromosome.error))
+        logger.debug("Generation number {} best chromosome error {} with {} chromosomes ".format(
+            generation, best_chromosome.error, len(population.chromosomes)))
+
         if best_chromosome.error == 0:
             logger.debug("Exiting early as we have hit the best possible error.")
             break
