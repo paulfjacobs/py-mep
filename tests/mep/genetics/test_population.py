@@ -19,7 +19,7 @@ class TestPopulation(unittest.TestCase):
         # construct the population
         num_examples = 5
         num_features = 7
-        population = Population(np.zeros((num_examples, num_features)), [], 1, 1, 1, 1, 1, 1, 1, 1)
+        population = Population(np.zeros((num_examples, num_features)), [], 1, 1, 1, 1, 1, 1, 1)
 
         # confirm the number of feature variables (not critical for this test)
         self.assertEqual(num_features, population.num_feature_variables)
@@ -41,7 +41,7 @@ class TestPopulation(unittest.TestCase):
         # construct the population
         num_examples = 5
         num_features = 7
-        population = Population(np.zeros((num_examples, num_features)), [], 1, 1, 1, 1, 1, 1, 1, 1)
+        population = Population(np.zeros((num_examples, num_features)), [], 1, 1, 1, 1, 1, 1, 1)
 
         # test the tournament selection; not that it randomly chooses the not as good chromosome
         min_chromosome, max_chromosome = Chromosome([], []), Chromosome([], [])

@@ -11,7 +11,7 @@ Based upon the C++ code [here](https://github.com/mepx/mep-basic-src).
 Create the conda environment and source it (Linux):
 
 ```
-conda env create -f environment.yml
+conda env create -f environment.yaml
 source activate py-mep-dev
 ```
 
