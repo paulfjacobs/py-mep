@@ -2,6 +2,7 @@ import logging
 import numpy as np
 from collections import deque
 from mep.genetics.gene import Gene, VariableGene, OperatorGene
+from mep.genetics.operator import AdditionOperator, MultiplicationOperator, SubtractionOperator
 from random import random, randint, choice
 
 
@@ -13,9 +14,9 @@ class Chromosome(object):
     """
 
     # valid operators
-    operator_lambdas = [lambda a, b: a + b,  # +
-                        lambda a, b: a - b,  # -
-                        lambda a, b: a * b]  # *
+    operators_family = [AdditionOperator,
+                        MultiplicationOperator,
+                        SubtractionOperator]
 
     def __init__(self, genes, constants):
         """
@@ -80,7 +81,7 @@ class Chromosome(object):
             prob = random()
             if prob <= operators_prob:
                 # randomly choose valid addresses; randomly choose an operator
-                genes.append(OperatorGene(choice(Chromosome.operator_lambdas),
+                genes.append(OperatorGene(choice(Chromosome.operators_family)(),
                                           randint(0, gene_index - 1), randint(0, gene_index - 1)))
             elif prob <= operators_prob + feature_variable_prob:
                 genes.append(VariableGene(randint(0, num_feature_variables - 1), is_feature=True))
@@ -176,15 +177,8 @@ class Chromosome(object):
             if type(gene) == VariableGene:
                 gene_str = gene.pretty_string()
             elif type(gene) == OperatorGene:
-                # TODO: Push this logic into the gene; the only tricky part is the operator lambda; we will probably
-                # need to replace the lambda with a larger object
-                if gene.operation == Chromosome.operator_lambdas[0]:
-                    op = "+"
-                elif gene.operation == Chromosome.operator_lambdas[1]:
-                    op = "-"
-                elif gene.operation == Chromosome.operator_lambdas[2]:
-                    op = "*"
-                gene_str = "PROGRAM[{}] {} PROGRAM[{}]".format(gene.address1, op, gene.address2)
+                gene_str = "{}(PROGRAM[{}], PROGRAM[{}])".format(gene.operation.function_name(),
+                                                                 gene.address1, gene.address2)
             program += "{}:{}\n".format(gene_index, gene_str)
 
             if self.best_gene_index == gene_index and stop_at_best:
@@ -251,6 +245,9 @@ class Chromosome(object):
         python_program = """
 import sys
 
+# define operator/functions
+{}
+
 if __name__ == "__main__":
     # constants
     {}
@@ -261,6 +258,8 @@ if __name__ == "__main__":
     # print out the final answer
     {}
     """
+        # define all the function/operators
+        operator_def_str = "\n".join([operator().function_python_definition() for operator in self.operators_family])
 
         # constants
         constants_str = "constants = {}".format(self.constants)
@@ -275,17 +274,13 @@ if __name__ == "__main__":
                 else:
                     genes_str += "constants[{}]".format(gene.index)
             elif type(gene) == OperatorGene:
-                if gene.operation == Chromosome.operator_lambdas[0]:
-                    op = "+"
-                elif gene.operation == Chromosome.operator_lambdas[1]:
-                    op = "-"
-                elif gene.operation == Chromosome.operator_lambdas[2]:
-                    op = "*"
-                genes_str += "program[{}] {} program[{}]".format(gene.address1, op, gene.address2)
+                genes_str += "{}(program[{}], program[{}])".format(gene.operation.function_name(),
+                                                                   gene.address1, gene.address2)
             genes_str += "\n"
 
         # print statement
-        python_program = python_program.format(constants_str, genes_str, "print(program[{}])".format(len(self.genes)-1))
+        python_program = python_program.format(operator_def_str, constants_str, genes_str,
+                                               "print(program[{}])".format(len(self.genes)-1))
 
         # return it
         return python_program

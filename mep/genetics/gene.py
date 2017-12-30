@@ -31,7 +31,8 @@ class Gene(object):
         """
 
 
-# TODO: Should we also add a mutate method to the gene itself?
+# NOTE: Should we also add a mutate method to the gene itself? Considering that we are doing the mutation by doing
+# a crossover of the whole chromosome with a new random chromosome, I don't think there is any benefit.
 
 
 class VariableGene(object):
