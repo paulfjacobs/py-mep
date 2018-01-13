@@ -1,5 +1,6 @@
 import unittest
 from mep.genetics.operator import MultiplicationOperator, AdditionOperator, SubtractionOperator
+from mep.genetics.operator import MinOperator, MaxOperator
 
 
 class TestOperators(unittest.TestCase):
@@ -41,4 +42,28 @@ def add(x, y):
                 self.assertEquals("""
 def subtraction(x, y):
     return x - y
+        """, operator.function_python_definition())
+
+    def test_min_operator(self):
+                    """
+                    """
+                    # construct the operator and test it
+                    operator = MinOperator()
+                    self.assertEquals(min(5, 2), operator(5, 2))
+                    self.assertEquals("min_", operator.function_name())
+                    self.assertEquals("""
+def min_(x, y):
+    return min(x, y)
+        """, operator.function_python_definition())
+
+    def test_max_operator(self):
+        """
+        """
+        # construct the operator and test it
+        operator = MaxOperator()
+        self.assertEquals(max(5, 2), operator(5, 2))
+        self.assertEquals("max_", operator.function_name())
+        self.assertEquals("""
+def max_(x, y):
+    return max(x, y)
         """, operator.function_python_definition())

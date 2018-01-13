@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-# TODO: add some more interesting operators; example pow(...), log(...), exp(...), min(...), max(...)
+# TODO: add some more interesting operators; example pow(...), log(...), exp(...)
 class Operator(object):
     """
     This is more of a function than a traditional "operator" but the function could be simply using an operator
@@ -101,4 +101,46 @@ class SubtractionOperator(Operator):
         return """
 def subtraction(x, y):
     return x - y
+        """
+
+
+class MinOperator(Operator):
+    """
+    Perform the Min operation.
+    """
+
+    def __call__(self, *args, **kwargs):
+        """
+        Perform min
+        """
+        return min(args)
+
+    def function_name(self):
+        return "min_"
+
+    def function_python_definition(self):
+        return """
+def min_(x, y):
+    return min(x, y)
+        """
+
+
+class MaxOperator(Operator):
+    """
+    Perform the Max operation.
+    """
+
+    def __call__(self, *args, **kwargs):
+        """
+        Perform max
+        """
+        return max(args)
+
+    def function_name(self):
+        return "max_"
+
+    def function_python_definition(self):
+        return """
+def max_(x, y):
+    return max(x, y)
         """

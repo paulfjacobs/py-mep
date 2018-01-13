@@ -3,6 +3,7 @@ import numpy as np
 from collections import deque
 from mep.genetics.gene import Gene, VariableGene, OperatorGene
 from mep.genetics.operator import AdditionOperator, MultiplicationOperator, SubtractionOperator
+from mep.genetics.operator import MinOperator, MaxOperator
 from random import random, randint, choice
 
 
@@ -16,7 +17,9 @@ class Chromosome(object):
     # valid operators
     operators_family = [AdditionOperator,
                         MultiplicationOperator,
-                        SubtractionOperator]
+                        SubtractionOperator,
+                        MinOperator,
+                        MaxOperator]
 
     def __init__(self, genes, constants):
         """
