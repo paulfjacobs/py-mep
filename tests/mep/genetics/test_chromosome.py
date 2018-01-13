@@ -50,7 +50,7 @@ class TestChromosome(unittest.TestCase):
         self.assertEquals(VariableGene(0, is_feature=False), chromosome.genes[0])
 
         # the 2nd gene can be a variable or an operator; in this case it is the below
-        self.assertEquals(OperatorGene(Chromosome.operator_lambdas[1], 0, 0), chromosome.genes[1])
+        self.assertEquals(OperatorGene(Chromosome.operators_family[1](), 0, 0), chromosome.genes[1])
 
         # verify constant
         self.assertAlmostEquals(8.599796663725433, chromosome.constants[0])

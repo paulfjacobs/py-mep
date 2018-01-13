@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
+# TODO: add some more interesting operators; example pow(...), log(...), exp(...), min(...), max(...)
 class Operator(object):
     """
     This is more of a function than a traditional "operator" but the function could be simply using an operator

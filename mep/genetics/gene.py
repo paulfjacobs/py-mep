@@ -186,4 +186,6 @@ class OperatorGene(object):
     def __eq__(self, other):
         if other is None or not isinstance(other, OperatorGene):
             return False
-        return self.operation == other.operation and self.address1 == other.address1 and self.address2 == other.address2
+
+        # NOTE: the operators are the same if they are of the same type
+        return isinstance(self.operation, type(other.operation)) and self.address1 == other.address1 and self.address2 == other.address2
