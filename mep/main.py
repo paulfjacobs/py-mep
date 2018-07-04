@@ -7,7 +7,13 @@ from dataset import DataSet
 from mep.genetics.population import Population
 
 if __name__ == "__main__":
-    # TODO: error check usage
+    if len(sys.argv) != 3:
+        print("ERROR: Expected usage 'python -m mep.main DATA_SET_NAME PYTHON_FILE_NAME'\n" +
+              "     DATA_SET_NAME:    The name (full path) to the data file to train on.\n"
+              "     PYTHON_FILE_NAME: The name (full path) to the python file to write the output program.\n"
+              "Example: 'python -m mep.main datasets/data1.csv test.py'"
+              )
+        sys.exit(-1)
 
     # get the data file
     data_set_name = sys.argv[1]
@@ -69,7 +75,6 @@ if __name__ == "__main__":
         logger.debug(python_program)
         python_file.write(python_program)
 
-    # TODO: Convert the output to a valid python program
     # TODO: Add support for classification
     # TODO: Add example digital circuit test
     # TODO: Add UDFs
