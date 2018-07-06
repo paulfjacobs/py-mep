@@ -73,11 +73,29 @@ class MEPModel(object):
 
     def predict(self, X):
         """
+        Return the predictions for this data.
+        :param X: the sample data; matrix with (n_samples, n_features)
+        :type X: np.matrix
+        :return: the prediction for each sample; array-like (n_samples) length
+        :rtype: np.array
+        """
+        return self.best_chromosome.predict(X)
 
+    def score(self, X):
+        """
+        Returns the coefficient of determination R^2 of the prediction.
+
+        The coefficient R^2 is defined as (1 - u/v), where u is the residual sum of squares
+        ((y_true - y_pred) ** 2).sum() and v is the total sum of squares ((y_true - y_true.mean()) ** 2).sum().
+        The best possible score is 1.0 and it can be negative (because the model can be arbitrarily worse).
+        A constant model that always predicts the expected value of y, disregarding the input features, would get a
+        R^2 score of 0.0.
+
+        (NOTE: Comment taken from scikit-learn.)
         :param X:
         :return:
         """
-        # TODO: Fill in logic
+        # TODO:
         pass
 
     # NOTE: These are NOT scikit-learn methods now

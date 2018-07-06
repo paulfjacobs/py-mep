@@ -113,6 +113,26 @@ class Chromosome(object):
                 self.error = error
                 self.best_gene_index = gene_index
 
+    def predict(self, data_matrix):
+        """
+        Return the predictions for this data.
+        :param data_matrix: the sample data; matrix with (n_samples, n_features)
+        :type data_matrix: np.matrix
+        :return: the prediction for each sample; array-like (n_samples) length
+        :rtype: np.array
+        """
+        # NOTE: This is almost identical to evaluate except that we are running after we have done the fit so we have
+        # already determined the best gene index and we just want to calculate the values; no error calc
+        num_examples = data_matrix.shape[0]
+        eval_matrix = np.zeros((len(self.genes), num_examples))
+        dummy_targets = [0] * num_examples
+        for gene_index, gene in enumerate(self.genes):
+            # compute the error for this gene; if it is the best we have found then update
+            gene.evaluate(gene_index, eval_matrix, data_matrix, self.constants, dummy_targets)
+            if self.best_gene_index == gene_index:
+                # extract from the eval_matrix; these from this gene (line in program) for each of the examples
+                return eval_matrix[gene_index, :]
+
     def mutate(self, gene_mutation_prob, num_constants, constants_min, constants_max, constants_prob,
                feature_variable_prob, num_feature_variables, num_genes, operators_prob):
         """
@@ -237,6 +257,9 @@ class Chromosome(object):
             if type(gene) == OperatorGene:
                 gene.address1 = gene_indices_in_use.index(gene.address1)
                 gene.address2 = gene_indices_in_use.index(gene.address2)
+
+        # the now "best gene" is just the last one
+        self.best_gene_index = len(self.genes) - 1
 
     def to_python(self):
         """
