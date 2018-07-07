@@ -81,7 +81,7 @@ class MEPModel(object):
         """
         return self.best_chromosome.predict(X)
 
-    def score(self, X):
+    def score(self, X, y):
         """
         Returns the coefficient of determination R^2 of the prediction.
 
@@ -92,11 +92,18 @@ class MEPModel(object):
         R^2 score of 0.0.
 
         (NOTE: Comment taken from scikit-learn.)
-        :param X:
-        :return:
+        :param X: the sample data; matrix with (n_samples, n_features)
+        :type X: np.matrix
+        :param y: the target values
+        :type y: array-like, shape = (n_samples)
+        :return: the score
+        :rtype: float
         """
-        # TODO:
-        pass
+        y_pred = self.predict(X)
+        u = ((y - y_pred) ** 2).sum()
+        v = ((y - y.mean()) ** 2).sum()
+
+        return 1 - u/v
 
     # NOTE: These are NOT scikit-learn methods now
     def to_python(self):
