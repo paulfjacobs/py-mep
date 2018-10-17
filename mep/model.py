@@ -41,10 +41,10 @@ class MEPModel(object):
 
     def fit(self, X, y):
         """
-
-        :param X:
-        :param y:
-        :return:
+        Fit the model. Given the feature vectors in matrix 'X' and the target vector 'y' we fit our model.
+        :param X: the feature matrix (training data)
+        :param y: the target values
+        :return: nothing
         """
         # construct a population and run it for the number of generations specified
         population = Population(X, y, self.num_constants,
