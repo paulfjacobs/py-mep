@@ -1,4 +1,6 @@
 import logging
+from typing import Union, Callable
+
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
@@ -124,7 +126,7 @@ class OperatorGene(Gene):
     """
 
     # NOTE: This could be expanded to multiple addresses
-    def __init__(self, operation: Operator, address1: int, address2: int):
+    def __init__(self, operation: Union[Callable, Operator], address1: int, address2: int):
         """
         Initialize.
         :param operation: a lambda or function that can be operated on two floats
