@@ -34,7 +34,7 @@ class TestGene(unittest.TestCase):
         # run the evaluate
         error = gene.evaluate(gene_index, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
-        self.assertEquals((1. - 0) + (1. - 0), error)
+        self.assertEqual((1. - 0) + (1. - 0), error)
 
     def test_basic_feature_gene(self):
         """
@@ -66,7 +66,7 @@ class TestGene(unittest.TestCase):
         # run the evaluate
         error = gene.evaluate(gene_index, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
-        self.assertEquals((5. - 0.) + (7. - 0.), error)
+        self.assertEqual((5. - 0.) + (7. - 0.), error)
 
     def test_constant_and_feature_gene(self):
         """
