@@ -3,11 +3,10 @@ import numpy as np
 from abc import ABCMeta, abstractmethod
 
 
-class Gene(object):
+class Gene(metaclass=ABCMeta):
     """
     Lowest level of the genetic structure of MEP. Think of this as one line of code in the program.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
@@ -35,7 +34,7 @@ class Gene(object):
 # a crossover of the whole chromosome with a new random chromosome, I don't think there is any benefit.
 
 
-class VariableGene(object):
+class VariableGene(Gene):
     """
     This gene is simply a variable. Either a constant or one of the features in the data -- i.e. an input variable.
     """
@@ -118,7 +117,7 @@ class VariableGene(object):
         return self.index == other.index and self.is_feature == other.is_feature
 
 
-class OperatorGene:
+class OperatorGene(Gene):
     """
     This gene performance an operation on two addresses. The addresses are indices in the eval_matrix -- i.e. from the
     evaluation of other genes before this one.
