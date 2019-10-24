@@ -4,7 +4,7 @@ from mep.genetics.population import Population
 
 # NOTE: The idea is to explicitly conform to a scikit-learn type of approach where we can run fit(..) and
 # predict(..) methods on the model
-class MEPModel(object):
+class MEPModel:
     """
     Encapsulate the MEP model.
     """

@@ -118,7 +118,7 @@ class VariableGene(object):
         return self.index == other.index and self.is_feature == other.is_feature
 
 
-class OperatorGene(object):
+class OperatorGene:
     """
     This gene performance an operation on two addresses. The addresses are indices in the eval_matrix -- i.e. from the
     evaluation of other genes before this one.

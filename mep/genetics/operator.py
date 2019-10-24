@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 
 
 # TODO: add some more interesting operators; example pow(...), log(...), exp(...)
-class Operator(object):
+class Operator:
     """
     This is more of a function than a traditional "operator" but the function could be simply using an operator
     like "+", "-", etc. At it's core these are indivisible functions that take arguments (i.e. preceding genes) and
