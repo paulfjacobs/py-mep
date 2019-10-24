@@ -3,7 +3,7 @@ import datetime as dt
 import json
 import logging
 import os
-from dataset import DataSet
+from mep.dataset import DataSet
 from mep.model import MEPModel
 
 if __name__ == "__main__":
