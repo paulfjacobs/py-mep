@@ -15,6 +15,13 @@ conda env create -f environment.yaml
 source activate py-mep-dev
 ```
 
+Or using `pip` we could do:
+
+```
+virtualenv -p python3 .venv
+pip install -r requirements.txt
+```
+
 Example, running with a dataset `python -m mep.main datasets/data1.csv test.py`. This will run a full MEP population evolution to solve the problem specified in the data CSV, determine the best chromosome, prune it, and then convert that chromosome into a functioning python program that can be run by passing in the feature inputs. Example, `python test.py 5 10`.
 
 An example Python program evolved to solve the addition problem of adding together two features (ex: datasets/data1.csv):
