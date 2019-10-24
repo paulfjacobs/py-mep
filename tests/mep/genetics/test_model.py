@@ -8,7 +8,7 @@ import datetime as dt
 # make reproducible
 random.seed(1)
 
-logging.basicConfig(filename="logs/TEST_{}.log".format(dt.datetime.now().strftime("%Y%m%d")),
+logging.basicConfig(filename="output_logs/TEST_{}.log".format(dt.datetime.now().strftime("%Y%m%d")),
                     level=logging.DEBUG,
                     filemode='w',
                     format="%(asctime)s %(name)s %(funcName)s %(levelname)s %(message)s")
