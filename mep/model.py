@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 from mep.genetics.population import Population
 
 
@@ -9,8 +10,9 @@ class MEPModel:
     Encapsulate the MEP model.
     """
 
-    def __init__(self, num_constants, constants_min, constants_max, feature_variables_probability, code_length,
-                 population_size, operators_probability, num_generations):
+    def __init__(self, num_constants: int, constants_min: float, constants_max: float,
+                 feature_variables_probability: float, code_length: int, population_size: int,
+                 operators_probability: float, num_generations: int):
 
         """
         Initialize.
@@ -39,7 +41,7 @@ class MEPModel:
         # the best found chromosome from the evolution process
         self.best_chromosome = None
 
-    def fit(self, X, y):
+    def fit(self, X: np.ndarray, y: np.ndarray):
         """
         Fit the model. Given the feature vectors in matrix 'X' and the target vector 'y' we fit our model.
         :param X: the feature matrix (training data)
@@ -71,17 +73,15 @@ class MEPModel:
         # prune out the unused genes
         self.best_chromosome.prune()
 
-    def predict(self, X):
+    def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Return the predictions for this data.
         :param X: the sample data; matrix with (n_samples, n_features)
-        :type X: np.matrix
         :return: the prediction for each sample; array-like (n_samples) length
-        :rtype: np.array
         """
         return self.best_chromosome.predict(X)
 
-    def score(self, X, y):
+    def score(self, X: np.ndarray, y: np.ndarray) -> float:
         """
         Returns the coefficient of determination R^2 of the prediction.
 
@@ -93,11 +93,9 @@ class MEPModel:
 
         (NOTE: Comment taken from scikit-learn.)
         :param X: the sample data; matrix with (n_samples, n_features)
-        :type X: np.matrix
         :param y: the target values
         :type y: array-like, shape = (n_samples)
         :return: the score
-        :rtype: float
         """
         y_pred = self.predict(X)
         u = ((y - y_pred) ** 2).sum()
