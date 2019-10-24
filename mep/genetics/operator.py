@@ -2,13 +2,12 @@ from abc import ABCMeta, abstractmethod
 
 
 # TODO: add some more interesting operators; example pow(...), log(...), exp(...)
-class Operator:
+class Operator(metaclass=ABCMeta):
     """
     This is more of a function than a traditional "operator" but the function could be simply using an operator
     like "+", "-", etc. At it's core these are indivisible functions that take arguments (i.e. preceding genes) and
     output some value.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __call__(self, *args, **kwargs):
@@ -27,6 +26,12 @@ class Operator:
         """
         Return the python definition of the function
         """
+
+    def __str__(self):
+        return self.function_name()
+
+    def __repr__(self):
+        return str(self)
 
 
 # TODO: Consolidate these into just one Operator?
