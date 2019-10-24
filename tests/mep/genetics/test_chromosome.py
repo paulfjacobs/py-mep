@@ -43,17 +43,17 @@ class TestChromosome(unittest.TestCase):
                                                            operators_prob=0.5)
 
         # confirm the number of genes and constants match what we expect
-        self.assertEquals(num_genes, len(chromosome.genes))
-        self.assertEquals(num_constants, len(chromosome.constants))
+        self.assertEqual(num_genes, len(chromosome.genes))
+        self.assertEqual(num_constants, len(chromosome.constants))
 
         # the first gene has to be a variable gene; in particular it is this one
-        self.assertEquals(VariableGene(0, is_feature=False), chromosome.genes[0])
+        self.assertEqual(VariableGene(0, is_feature=False), chromosome.genes[0])
 
         # the 2nd gene can be a variable or an operator; in this case it is the below
-        self.assertEquals(OperatorGene(Chromosome.operators_family[2](), 0, 0), chromosome.genes[1])
+        self.assertEqual(OperatorGene(Chromosome.operators_family[4](), 0, 0), chromosome.genes[1])
 
         # verify constant
-        self.assertAlmostEquals(8.599796663725433, chromosome.constants[0])
+        self.assertAlmostEqual(8.599796663725433, chromosome.constants[0])
 
     def test_evaluate(self):
         """
