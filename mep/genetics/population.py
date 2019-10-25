@@ -3,7 +3,7 @@ import random
 import copy
 
 
-class Population(object):
+class Population:
     """
     A collection of chromosomes.
     """

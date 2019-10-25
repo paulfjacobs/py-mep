@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class DataSet(object):
+class DataSet:
     """
     Encapsulate a data set. Feature vectors and their targets.
     """

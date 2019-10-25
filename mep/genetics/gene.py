@@ -1,16 +1,19 @@
 import logging
+from typing import Union, Callable
+
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
+from mep.genetics.operator import Operator
 
-class Gene(object):
+
+class Gene(metaclass=ABCMeta):
     """
     Lowest level of the genetic structure of MEP. Think of this as one line of code in the program.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
-    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
+    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets) -> float:
         """
         This method will modify the eval_matrix for this gene index for each example in the data_matrix.
 
@@ -35,25 +38,23 @@ class Gene(object):
 # a crossover of the whole chromosome with a new random chromosome, I don't think there is any benefit.
 
 
-class VariableGene(object):
+class VariableGene(Gene):
     """
     This gene is simply a variable. Either a constant or one of the features in the data -- i.e. an input variable.
     """
 
-    def __init__(self, index, is_feature=True):
+    def __init__(self, index: int, is_feature=True):
         """
         The index into either the feature vector (if "is_feature" is True) or into the constants.
         :param index: the index into the vector
-        :type index: int
         :param is_feature: whether this is a feature variable or a constant
-        :type is_feature: bool
         """
         # self.logger = logging.getLogger(self.__class__)
 
         self.index = index
         self.is_feature = is_feature
 
-    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
+    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets) -> float:
         """
         This method will modify the eval_matrix for this gene index for each example in the data_matrix.
 
@@ -118,22 +119,19 @@ class VariableGene(object):
         return self.index == other.index and self.is_feature == other.is_feature
 
 
-class OperatorGene(object):
+class OperatorGene(Gene):
     """
     This gene performance an operation on two addresses. The addresses are indices in the eval_matrix -- i.e. from the
     evaluation of other genes before this one.
     """
 
     # NOTE: This could be expanded to multiple addresses
-    def __init__(self, operation, address1, address2):
+    def __init__(self, operation: Union[Callable, Operator], address1: int, address2: int):
         """
         Initialize.
         :param operation: a lambda or function that can be operated on two floats
-        :type operation: lambda
         :param address1: index into the eval_matrix
-        :type address1: int
         :param address2: index into the eval_matrix
-        :type address2: int
         """
         # self.logger = logging.getLogger(self.__class__)
 
@@ -141,7 +139,7 @@ class OperatorGene(object):
         self.address1 = address1
         self.address2 = address2
 
-    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets):
+    def evaluate(self, gene_index, eval_matrix, data_matrix, constants, targets) -> float:
         """
         This method will modify the eval_matrix for this gene index for each example in the data_matrix.
 

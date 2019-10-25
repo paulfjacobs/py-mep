@@ -1,2 +1,2 @@
 #!/bin/bash
-py.test
+py.test tests/

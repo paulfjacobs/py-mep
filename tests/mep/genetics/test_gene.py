@@ -29,12 +29,12 @@ class TestGene(unittest.TestCase):
 
         # expected; only one gene and it is going to be using the first constant;
         gene_index = 0
-        expected_eval_matrix = np.matrix([[constants[constant_index], constants[constant_index]]])
+        expected_eval_matrix = np.array([[constants[constant_index], constants[constant_index]]])
 
         # run the evaluate
         error = gene.evaluate(gene_index, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
-        self.assertEquals((1. - 0) + (1. - 0), error)
+        self.assertEqual((1. - 0) + (1. - 0), error)
 
     def test_basic_feature_gene(self):
         """
@@ -61,12 +61,12 @@ class TestGene(unittest.TestCase):
 
         # expected; only one gene and it is going to be using the first constant;
         gene_index = 0
-        expected_eval_matrix = np.matrix([[data_matrix[0, feature_index], data_matrix[1, feature_index]]])
+        expected_eval_matrix = np.array([[data_matrix[0, feature_index], data_matrix[1, feature_index]]])
 
         # run the evaluate
         error = gene.evaluate(gene_index, eval_matrix, data_matrix, constants, targets)
         self.assertTrue(np.array_equal(expected_eval_matrix, eval_matrix))
-        self.assertEquals((5. - 0.) + (7. - 0.), error)
+        self.assertEqual((5. - 0.) + (7. - 0.), error)
 
     def test_constant_and_feature_gene(self):
         """
@@ -94,7 +94,7 @@ class TestGene(unittest.TestCase):
         data_matrix[1, feature_index] = 7.
 
         # expected;
-        expected_eval_matrix = np.matrix([[data_matrix[0, feature_index], data_matrix[1, feature_index]],
+        expected_eval_matrix = np.array([[data_matrix[0, feature_index], data_matrix[1, feature_index]],
                                           [constants[constant_index], constants[constant_index]]])
 
         # run the evaluate
@@ -127,8 +127,7 @@ class TestGene(unittest.TestCase):
         eval_matrix[0, 0] = 2
 
         # expected; first gene is unchanged; the 2nd one is the sum of the first with itself (i.e. 4)
-        expected_eval_matrix = np.matrix([[2],
-                                          [4]])
+        expected_eval_matrix = np.array([[2], [4]])
 
         # run the evaluate
         error = gene.evaluate(1, eval_matrix, data_matrix, constants, targets)

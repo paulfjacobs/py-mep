@@ -7,7 +7,7 @@ from mep.genetics.operator import MinOperator, MaxOperator
 from random import random, randint, choice
 
 
-class Chromosome(object):
+class Chromosome:
     """
     Level above Gene. Each chromosome is a fixed number of genes and constants. We can think of a chromosome as a
     program where each gene is a line of code in the program. Genes can reference the result of other genes by their
