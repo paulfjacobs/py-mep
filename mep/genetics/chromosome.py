@@ -196,14 +196,7 @@ class Chromosome:
 
         # now show each gene on a separate line
         for gene_index, gene in enumerate(self.genes):
-            gene_str = str(gene)
-            if isinstance(gene, VariableGene):
-                gene_str = gene.pretty_string()
-            elif isinstance(gene, OperatorGene):
-                # TODO: why not push to the gene?
-                gene_str = "{}(PROGRAM[{}], PROGRAM[{}])".format(gene.operation.function_name(),
-                                                                 gene.address1, gene.address2)
-            program += "{}:{}\n".format(gene_index, gene_str)
+            program += "{}:{}\n".format(gene_index, gene.pretty_string())
 
             if self.best_gene_index == gene_index and stop_at_best:
                 return program
