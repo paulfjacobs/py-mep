@@ -196,10 +196,11 @@ class Chromosome:
 
         # now show each gene on a separate line
         for gene_index, gene in enumerate(self.genes):
-            gene_str = gene.__str__()
-            if type(gene) == VariableGene:
+            gene_str = str(gene)
+            if isinstance(gene, VariableGene):
                 gene_str = gene.pretty_string()
-            elif type(gene) == OperatorGene:
+            elif isinstance(gene, OperatorGene):
+                # TODO: why not push to the gene?
                 gene_str = "{}(PROGRAM[{}], PROGRAM[{}])".format(gene.operation.function_name(),
                                                                  gene.address1, gene.address2)
             program += "{}:{}\n".format(gene_index, gene_str)
