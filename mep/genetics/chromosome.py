@@ -216,6 +216,9 @@ class Chromosome:
         Trim out the unused genes. NOTE: This "breaks" the chromosomes as it is going to change how many genes are
         in the program. Only do this once we have finished evolving the program.
         """
+
+        # TODO: drop genes which do nothing; ex: min(x[0], x[0]) or max(x[0], x[0])
+
         # the best gene index is going to be the last line of the program; since the genes never reference genes
         # beyond it then we just proceed back to the top and remove any which haven't been referenced; we determine
         # this via a BFS type search
@@ -238,7 +241,7 @@ class Chromosome:
 
             # check the addresses on the gene if it is an operator
             gene = self.genes[gene_index]
-            if type(gene) == OperatorGene:
+            if isinstance(gene, OperatorGene):
                 genes_indices_to_visit.appendleft(gene.address1)
                 genes_indices_to_visit.appendleft(gene.address2)
                 gene_indices_in_use.add(gene.address1)
@@ -255,7 +258,7 @@ class Chromosome:
         # TODO: This could be done in the list comprehension but it is clearer to just do another pass
         # re-map the address to the new index
         for gene in self.genes:
-            if type(gene) == OperatorGene:
+            if isinstance(gene, OperatorGene):
                 gene.address1 = gene_indices_in_use.index(gene.address1)
                 gene.address2 = gene_indices_in_use.index(gene.address2)
 
@@ -295,12 +298,12 @@ if __name__ == "__main__":
         genes_str = "program = [0] * {}\n".format(len(self.genes))
         for gene_index, gene in enumerate(self.genes):
             genes_str += "    program[{}] = ".format(gene_index)
-            if type(gene) == VariableGene:
+            if isinstance(gene, VariableGene):
                 if gene.is_feature:
                     genes_str += "float(sys.argv[{}])".format(gene.index + 1)
                 else:
                     genes_str += "constants[{}]".format(gene.index)
-            elif type(gene) == OperatorGene:
+            elif isinstance(gene, OperatorGene):
                 genes_str += "{}(program[{}], program[{}])".format(gene.operation.function_name(),
                                                                    gene.address1, gene.address2)
             genes_str += "\n"
