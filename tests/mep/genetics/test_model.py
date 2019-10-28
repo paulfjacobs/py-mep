@@ -54,7 +54,7 @@ class TestModel(unittest.TestCase):
         # fit the model
         model.fit(training_feature_matrix, training_target_vector)
 
-        self.assertEquals(model.score(test_feature_matrix, test_target_vector), 1)
+        self.assertEqual(model.score(test_feature_matrix, test_target_vector), 1)
 
     def test_model_min_max(self):
         model = MEPModel(num_constants=2, constants_min=-1, constants_max=1,
@@ -72,7 +72,7 @@ class TestModel(unittest.TestCase):
         # fit the model
         model.fit(training_feature_matrix, training_target_vector)
 
-        self.assertEquals(model.score(test_feature_matrix, test_target_vector), 1)
+        self.assertEqual(model.score(test_feature_matrix, test_target_vector), 1)
 
     def test_model_pow(self):
         model = MEPModel(num_constants=2, constants_min=-1, constants_max=1,
@@ -90,4 +90,4 @@ class TestModel(unittest.TestCase):
         # fit the model
         model.fit(training_feature_matrix, training_target_vector)
 
-        self.assertEquals(model.score(test_feature_matrix, test_target_vector), 1)
+        self.assertEqual(model.score(test_feature_matrix, test_target_vector), 1)

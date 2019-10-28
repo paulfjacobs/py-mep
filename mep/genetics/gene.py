@@ -32,7 +32,11 @@ class Gene(metaclass=ABCMeta):
         :return: error (sum of error across the examples); modifies the eval_matrix
         :rtype: float
         """
+        raise NotImplementedError()
 
+    @abstractmethod
+    def pretty_string(self) -> str:
+        raise NotImplementedError()
 
 # NOTE: Should we also add a mutate method to the gene itself? Considering that we are doing the mutation by doing
 # a crossover of the whole chromosome with a new random chromosome, I don't think there is any benefit.
@@ -99,11 +103,10 @@ class VariableGene(Gene):
     def __str__(self):
         return "VariableGene({}, is_feature={})".format(self.index, self.is_feature)
 
-    def pretty_string(self):
+    def pretty_string(self) -> str:
         """
         Pretty program string version.
         :return: string version
-        :rtype: str
         """
         if self.is_feature:
             return "FEATURES[{}]".format(self.index)
@@ -187,3 +190,10 @@ class OperatorGene(Gene):
 
         # NOTE: the operators are the same if they are of the same type
         return isinstance(self.operation, type(other.operation)) and self.address1 == other.address1 and self.address2 == other.address2
+
+    def pretty_string(self) -> str:
+        """
+        Pretty program string version.
+        :return: string version
+        """
+        return "{}(PROGRAM[{}], PROGRAM[{}])".format(self.operation.function_name(), self.address1, self.address2)

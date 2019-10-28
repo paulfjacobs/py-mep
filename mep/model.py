@@ -73,6 +73,8 @@ class MEPModel:
         # prune out the unused genes
         self.best_chromosome.prune()
 
+        self.logger.debug("Pruned chromosome (pretty)\n {}".format(self.best_chromosome.pretty_string()))
+
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Return the predictions for this data.
