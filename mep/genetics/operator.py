@@ -1,3 +1,6 @@
+import math
+import traceback
+import numpy as np
 from abc import ABCMeta, abstractmethod
 
 
@@ -148,4 +151,32 @@ class MaxOperator(Operator):
         return """
 def max_(x, y):
     return max(x, y)
+        """
+
+
+class DivisionOperator(Operator):
+    """
+    Perform the division operation.
+    """
+
+    def __call__(self, *args, **kwargs):
+        """
+        Perform the operation
+        """
+        if len(args) != 2:
+            raise RuntimeError("Pow operator needs just two arguments")
+        x = args[0]
+        y = args[1]
+
+        # looping back around division
+        # NOTE: this is pretty weird but
+        return x / y if y != 0 else 0
+
+    def function_name(self):
+        return "division_"
+
+    def function_python_definition(self):
+        return """
+def division_(x, y):
+    return x / y if y != 0 else 0
         """

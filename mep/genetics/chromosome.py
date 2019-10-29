@@ -2,7 +2,7 @@ import logging
 import numpy as np
 from collections import deque
 from mep.genetics.gene import Gene, VariableGene, OperatorGene
-from mep.genetics.operator import AdditionOperator, MultiplicationOperator, SubtractionOperator
+from mep.genetics.operator import AdditionOperator, MultiplicationOperator, SubtractionOperator, DivisionOperator
 from mep.genetics.operator import MinOperator, MaxOperator
 from random import random, randint, choice
 
@@ -19,7 +19,9 @@ class Chromosome:
                         MultiplicationOperator,
                         SubtractionOperator,
                         MinOperator,
-                        MaxOperator]
+                        MaxOperator,
+                        DivisionOperator
+                        ]
 
     def __init__(self, genes, constants):
         """
